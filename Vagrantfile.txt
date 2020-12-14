@@ -1,0 +1,39 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/bionic64"
+
+end
+----------------
+
+config.vm.synced_folder ".", "/vagrant", disabled: true
+
+config.vm.synced_folder "src/", "/srv/website",
+  owner: "root", group: "root"
+
+config.vm.provision "shell",
+        inline: "cat /configs/id_bionic.pub >> .ssh/authorized_keys"
+
+-----------------
+$script_mysql = <<-SCRIPT
+  #codigo omitido
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+
+  config.vm.define "mysqldb" do |mysql|
+    #configurações da instalação MySQL omitidas
+  end
+
+  config.vm.define "phpweb" do |phpweb|
+    #aqui vem os passos para instalar PHP
+  end
+end
+---------------------
+phpweb.vm.provision "shell", inline: "apt-get update && apt-get install -y puppet"
+----------
+phpweb.vm.provision "puppet" do |puppet|
+  puppet.manifests_path = "./configs/manifests"
+  puppet.manifest_file = "phpweb.pp"
+end
+----
