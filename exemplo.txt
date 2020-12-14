@@ -3,6 +3,8 @@ apt-get update
 apt-get -y install apache2
 SCRIPT
 
+#comentario
+
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
 
